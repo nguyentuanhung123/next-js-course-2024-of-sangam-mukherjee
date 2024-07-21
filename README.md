@@ -99,3 +99,37 @@ export default function Home() {
 - B1: Tạo 1 thư mục là [...product-review] bên trong thư mục products
 - B2: Tạo một file là page.js trong thư mục [...product-review]
 - B3: Khi ta truy cập http://localhost:3000/products/2/64/21/beqg -> Nó sẽ chạy file page.js vừa tạo đó.
+
+### Navigate using next/link (Không có dấu '/' cũng được)
+
+```jsx
+import Link from "next/link";
+
+<div>
+  <Link href={'products'}>Navigate to products page</Link>
+  <Link href={'/accounts'}>Navigate to accounts page</Link>
+</div>
+```
+
+### Navigate using useRouter Hook
+
+- B1: Chuyển đổi server component mặc định thành client component bằng cách thêm : 'use client' đặt trên đầu
+- B2: Import useRouter
+
+```jsx
+import { useRouter } from "next/navigation";
+const router = useRouter();
+
+console.log("Router: ", router); // Router:  {back: ƒ, forward: ƒ, prefetch: ƒ, replace: ƒ, push: ƒ, …}
+```
+
+- B3: Chuyển đến trang products (Không có dấu '/' cũng được)
+
+```jsx
+function navigateToProducts() {
+  router.push('/products');
+}
+
+<h2 className="font-bold mt-3 text-lg">Alternative Way of navigating using useRouter</h2>
+<button onClick={navigateToProducts}>Navigate to products page using use router</button>
+```
