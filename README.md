@@ -238,3 +238,57 @@ export default function ProductReview({params}) {
     );
 }
 ```
+
+### Loading UI on NextJS : https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming
+
+- Vấn đề xảy ra: Khi ta có một thanh Navbar để chuyển hướng và khi chuyển hướng phải fetch data cho trang đó và nó cần thời gian nên ta phải thêm logic Loading UI
+
+- B1: Tạo file loading.js trong thư mục app
+- B2: Chỉnh sử ở file layout.js trong thư mục app.js
+
+- Ban đầu:
+
+```jsx
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
+```
+
+- Thêm logic Loading UI
+
+```jsx
+import { Suspense } from "react";
+import Loading from "./loading";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </body>
+    </html>
+  );
+}
+```
+
+### Custom 404 Page
+
+- B1: Tạo 1 file là not-found.js trong thư mục app
+- B2: Khai báo
+
+```jsx
+import Link from "next/link";
+
+export default function NotFound() {
+    return (
+        <div>
+            <h1>This page does not exist</h1>
+            <Link href={'/'}>Go back to home</Link>
+        </div>
+    )
+}
+```
