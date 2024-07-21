@@ -1,5 +1,10 @@
-export default function ProductDetails() {
+export default function ProductDetails({ params }) {
+
+    console.log("params: ", params); // params:  { details: '100' }
+
     return (
-        <h1>This is Product Details page</h1>
+        <div>
+            <h1>This is Product Details page</h1>
+        </div>
     );
 }

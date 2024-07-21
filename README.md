@@ -133,3 +133,108 @@ function navigateToProducts() {
 <h2 className="font-bold mt-3 text-lg">Alternative Way of navigating using useRouter</h2>
 <button onClick={navigateToProducts}>Navigate to products page using use router</button>
 ```
+
+### Redirect in server components
+
+- Ta biết rằng ta không thể sử dụng useRouter trong server component và cũng không thể sử dụng thẻ Link do thẻ Link chỉ có thể kích hoạt khi click vào
+- Ở accounts page, nếu giả sử userProfileInfo = null thì ta muốn chuyển nó trực tiếp sang profile page
+
+- B1: Tạo 1 thư mục trong app (cùng cấp với accounts) tên là profile
+- B2: Tạo một file là page.js trong thư mục profile
+- B3: Tạo một logic trong thư mục accounts để khi ta truy cập http://localhost:3000/accounts thì nó sẽ chuyển tới http://localhost:3000/profile
+
+```jsx
+import { redirect } from "next/navigation";
+
+export default function Accounts() {
+
+    // assume that profile info is null
+    const userProfileInfo = null
+
+    if (userProfileInfo === null) {
+        redirect('profile')
+    }
+
+    return (
+        <h1>Accounts page</h1>
+    );
+}
+```
+
+### useParams and useSearchParams
+- Phải thêm 'use client' để có thể sử dụng useParams và useSearchParams
+- Giả sử ta có đường dẫn là http://localhost:3000/cart?search=product1&radomValue=abcxyz
+
+- Sử dụng useParams để lấy tên đường dẫn sau dấu '/'
+- Sử dụng useSearchParams để lấy giá trị chi tiết của biến sau dấu '?'
+
+```jsx
+'use client'
+
+import { usePathname, useSearchParams } from "next/navigation";
+
+export default function Cart() {
+
+    const pathName = usePathname();
+    console.log("pathName: ", pathName); // pathName:  /cart
+
+    const searchParams = useSearchParams();
+    console.log(searchParams.get('search'), searchParams.get('radomValue')); // product1 abcxyz
+
+    return (
+        <div>
+            <h1>This is Cart component.</h1>
+        </div>
+    );
+}
+```
+
+## Giả sử ta muốn lấy thông tin chi tiết của một sản phẩm bất kỳ có đường dẫn như: http://localhost:3000/products/100
+
+```jsx
+export default function ProductDetails({ params }) {
+
+    console.log("params: ", params); // params:  { details: '100' }
+
+    return (
+        <div>
+            <h1>This is Product Details page</h1>
+        </div>
+    );
+}
+```
+
+## Giả sử ta có đường dẫn là http://localhost:3000/products?search=product1
+
+- Vấn đề xảy ra: Ở products page ta không thể sử dụng useParams và useSearchParams để lấy tên biến sau dấu '/' và chi tiết biến sau dấu '?' do products page là một server component mà không phải là client server
+- Để có thể lấy chi tiết tên biến
+
+```jsx
+export default function Products({searchParams}) {
+
+    // console.log("params on products page: ", params); // params on products page:  {}
+    // console.log("searchParams on products page: ", searchParams); // searchParams on products page:  { search: 'product1' }
+    console.log(searchParams.search) // product1
+
+    return (
+        <h1>Products page</h1>
+    );
+}
+```
+
+## Giả sử ta có đường dẫn là http://localhost:3000/products/1/2/3/4
+
+- Để lấy tất cả đường dẫn ta đặt:
+
+```jsx
+export default function ProductReview({params}) {
+
+    console.log(params); // { 'product-review': [ '1', '2', '3', '4' ] }
+
+    return (
+        <div>
+            <h1>This is Product Review page and this is a catch all segment/route</h1>
+        </div>
+    );
+}
+```
