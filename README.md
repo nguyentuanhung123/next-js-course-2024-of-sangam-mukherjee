@@ -292,3 +292,67 @@ export default function NotFound() {
     )
 }
 ```
+
+### Data fetching
+
+- B1: Tạo 1 thư mục là client-data-fetch
+- B2: Tạo 1 thư mục là server-data-fetch
+- B3: Lấy data vào trang dummy.json
+
+## Data Fetching, Caching, and Revalidating
+
+- Data Fetching là một phần cốt lõi của bất kỳ ứng dụng nào. Trang này trình bày cách bạn có thể tìm nạp, lưu vào bộ nhớ đệm và xác thực lại dữ liệu trong React và Next.js.
+
+- There are four ways you can fetch data:
+
+- On the server, with fetch
+- On the server, with third-party libraries
+- On the client, via a Route Handler
+- On the client, with third-party libraries.
+
+## Server Component
+- Đây là chế độ mặc định của component trong Next.js
+
+- Ưu điểm:
+
+- Fetch data ở server => Nơi gần data center nên là sẽ nhanh hơn là fetch ở client => Giảm thiểu thời gian rendering, tăng UX
+- Bảo mật: Server cho phép giữ các data nhạy cảm, logic đặc biệt không muốn public ở client
+- Caching: Vì được render ở server nên có thể lưu giữ cache cho nhiều người dùng khác nhau => Không cần render trên mỗi request
+- Bundle Size: Giảm thiểu JS bundle size vì client không cần tải về phần JS logic để render HTML
+- Load trang lần đầu nhanh và chỉ số FCP (First Contentful Paint) thấp do người dùng sẽ thấy content ngay lập tức
+- Search Engine Optimization and Social Network Shareability
+- Streaming
+=> Ưu tiên dùng Server Component khi có thể
+
+## Fetching Data on the Server with fetch
+- Next.js mở rộng API Web tìm nạp gốc để cho phép bạn cấu hình hành vi caching và revalidating cho từng yêu cầu tìm nạp trên máy chủ. React mở rộng fetch để tự động ghi nhớ các yêu cầu tìm nạp trong khi hiển thị cây thành phần React.
+
+- Bạn có thể sử dụng fetch với async/await trong Server Components, trong Route Handlers và trong Server Actions.
+
+## Caching Data
+
+- Bộ nhớ đệm lưu trữ dữ liệu (Caching stores data) nên không cần phải tìm nạp lại dữ liệu từ nguồn dữ liệu của bạn theo mọi yêu cầu.
+
+- Theo mặc định, Next.js tự động lưu trữ các giá trị fetch được trả về trong Data Cache trên server. Điều này có nghĩa là dữ liệu có thể được tìm nạp tại thời điểm xây dựng hoặc thời gian yêu cầu, được lưu vào bộ đệm và sử dụng lại trên mỗi yêu cầu dữ liệu.
+
+```jsx
+// 'force-cache' is the default, and can be omitted
+fetch('https://...', { cache: 'force-cache' })
+```
+
+- Tuy nhiên, vẫn có những trường hợp ngoại lệ, yêu cầu tìm nạp không được lưu vào bộ đệm khi:
+
+- Được sử dụng bên trong Server Action.
+- Được sử dụng bên trong Route Handler sử dụng phương thức POST.
+
+# Data Cache là gì?
+
+- Data Cache là bộ đệm HTTP liên tục. Tùy thuộc vào nền tảng của bạn, bộ đệm có thể tự động mở rộng quy mô và được chia sẻ trên nhiều vùng.
+
+## Revalidating Data
+
+- Revalidation (Xác thực lại) là quá trình xóa Data Cache và tìm nạp lại dữ liệu mới nhất. Điều này rất hữu ích khi dữ liệu của bạn thay đổi và bạn muốn đảm bảo hiển thị thông tin mới nhất.
+
+## SWR: https://swr.vercel.app/docs/getting-started
+
+- B1: npm i swr
